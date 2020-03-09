@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'dev') {
     urlDB = 'mongodb://localhost:27017/sample_airbnb';
 } else {
    
-    urlDB = 'mongodb+srv://clases:M0ngusRul3s20@cluster0-wkwwm.mongodb.net/sample_airbnb'
+  //  urlDB = 'mongodb+srv://clases:M0ngusRul3s20@cluster0-wkwwm.mongodb.net/sample_airbnb'
 
 }
 
