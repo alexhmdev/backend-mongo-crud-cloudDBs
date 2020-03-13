@@ -14,8 +14,8 @@ app.post('/registrar', (req, res) => {
         city: body.city,
         country: body.country,
         district: body.district,
-        firstName: body.firstName,
-        lastName: body.lastName
+        firstName: body.firstName.toLowerCase(),// toLowerCase() se usa para convertir todo en minusculas :)
+        lastName: body.lastName.toLowerCase()
 
     });
 
@@ -177,4 +177,36 @@ app.delete('/eliminar/:id', (req, res) => {
     });
 });
 
+//eliminar por nombre completo
+app.delete('/eliminarXnombre/:firstName/:lastName', (req, res) => {
+    let firstName = req.params.firstName;
+    let lastName = req.params.lastName;
+   
+
+    Customer.findOneAndUpdate({ firstName, lastName}, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, resp) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                status:400,
+                msg:"No se elimino el customer",
+                cont:err
+            });
+        }
+
+        if(!resp) {
+            return res.status(404).json({
+                ok: false,
+                status:404,
+                msg:"No se encontró el usuario.",
+                resp
+            });
+        }
+        return res.status(200).json({
+            ok: true,
+            status:200,
+            msg:"Se elimino correctamente customers por nombre",
+            resp
+        });
+    });
+});
 module.exports = app;
