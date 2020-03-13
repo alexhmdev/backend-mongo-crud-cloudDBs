@@ -34,7 +34,7 @@ let customerSchema = new Schema({
     lastName: {
         type: String
     },
-    status:{
+    estado:{
         type: Boolean,
         default: true
     }
@@ -46,4 +46,4 @@ customerSchema.plugin(uniquevalidator, {
 ({collection:"Customers"});
 
 //crea una coleccion
-module.exports = mongoose.model('House', customerSchema);
+module.exports = mongoose.model('Customer', customerSchema);

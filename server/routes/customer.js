@@ -51,6 +51,7 @@ app.get('/obtener', (req, res) => {
             }
             console.log(req.customer);
             return res.status(200).json({
+
                 ok: true,
                 status:200,
                 msg:"Se obtuvieron los customers correctamente",
@@ -64,7 +65,7 @@ app.get('/obtener', (req, res) => {
 app.get('/obtener/:id', (req, res) => {
     let id = req.params.id;
     Customer.find({ estado: true, _id: id }) 
-        .exec((err, customers) => { //ejecuta la funcion
+        .exec((err, Customers) => { //ejecuta la funcion
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -77,9 +78,57 @@ app.get('/obtener/:id', (req, res) => {
             return res.status(200).json({
                 ok: true,
                 status:400,
-                msg:"Se mostro la customer correctamente",
-                count: customers.length,
-                customers
+                msg:"Se mostro la customer correctamente por id",
+                count: Customers.length,
+                Customers
+            });
+        });
+});
+
+//get por nombre
+app.get('/obtenerXnombre/:nombre', (req, res) => {
+    let nombre = req.params.nombre;
+    Customer.find({ estado: true, firstName: nombre }) 
+        .exec((err, Customers) => { //ejecuta la funcion
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    status:400,
+                    msg:"No se mostro el customer",
+                    cont:err
+                });
+            }
+            console.log(req.customer);
+            return res.status(200).json({
+                ok: true,
+                status:200,
+                msg:"Se mostro el customer correctamente por nombre",
+                count: Customers.length,
+                Customers
+            });
+        });
+});
+
+//get por pais country
+app.get('/obtenerXpais/:pais', (req, res) => {
+    let pais = req.params.pais;
+    Customer.find({ estado: true, country: pais }) 
+        .exec((err, Customers) => { //ejecuta la funcion
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    status:400,
+                    msg:"No se mostro el customer",
+                    cont:err
+                });
+            }
+            console.log(req.customer);
+            return res.status(200).json({
+                ok: true,
+                status:200,
+                msg:"Se mostro el customer correctamente por country",
+                count: Customers.length,
+                Customers
             });
         });
 });
