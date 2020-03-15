@@ -1,6 +1,7 @@
 /* jshint esversion: 8 */
 const mongoose = require('mongoose');
 const uniquevalidator = require('mongoose-unique-validator');
+const AutoIncrement =require('mongoose-sequence')(mongoose);
 
 //declarar esquema
 let Schema = mongoose.Schema;
@@ -34,7 +35,7 @@ let customerSchema = new Schema({
     lastName: {
         type: String
     },
-    status:{
+    estado:{
         type: Boolean,
         default: true
     }
@@ -43,7 +44,11 @@ let customerSchema = new Schema({
 customerSchema.plugin(uniquevalidator, {
     message: '{PATH} Debe que ser único'
 });
+
 ({collection:"Customers"});
+customerSchema.plugin(AutoIncrement,{_id:'_id'},{
+    message:'{PATH} Debe de ser unico y diferente'
+});
 
 //crea una coleccion
-module.exports = mongoose.model('House', customerSchema);
+module.exports = mongoose.model('Customer', customerSchema);

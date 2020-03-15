@@ -14,8 +14,8 @@ app.post('/registrar', (req, res) => {
         city: body.city,
         country: body.country,
         district: body.district,
-        firstName: body.firstName,
-        lastName: body.lastName
+        firstName: body.firstName.toLowerCase(),// toLowerCase() se usa para convertir todo en minusculas :)
+        lastName: body.lastName.toLowerCase()
 
     });
 
@@ -51,6 +51,7 @@ app.get('/obtener', (req, res) => {
             }
             console.log(req.customer);
             return res.status(200).json({
+
                 ok: true,
                 status:200,
                 msg:"Se obtuvieron los customers correctamente",
@@ -64,7 +65,7 @@ app.get('/obtener', (req, res) => {
 app.get('/obtener/:id', (req, res) => {
     let id = req.params.id;
     Customer.find({ estado: true, _id: id }) 
-        .exec((err, customers) => { //ejecuta la funcion
+        .exec((err, Customers) => { //ejecuta la funcion
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -77,9 +78,57 @@ app.get('/obtener/:id', (req, res) => {
             return res.status(200).json({
                 ok: true,
                 status:400,
-                msg:"Se mostro la customer correctamente",
-                count: customers.length,
-                customers
+                msg:"Se mostro la customer correctamente por id",
+                count: Customers.length,
+                Customers
+            });
+        });
+});
+
+//get por nombre
+app.get('/obtenerXnombre/:nombre', (req, res) => {
+    let nombre = req.params.nombre;
+    Customer.find({ estado: true, firstName: nombre }) 
+        .exec((err, Customers) => { //ejecuta la funcion
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    status:400,
+                    msg:"No se mostro el customer",
+                    cont:err
+                });
+            }
+            console.log(req.customer);
+            return res.status(200).json({
+                ok: true,
+                status:200,
+                msg:"Se mostro el customer correctamente por nombre",
+                count: Customers.length,
+                Customers
+            });
+        });
+});
+
+//get por pais country
+app.get('/obtenerXpais/:pais', (req, res) => {
+    let pais = req.params.pais;
+    Customer.find({ estado: true, country: pais }) 
+        .exec((err, Customers) => { //ejecuta la funcion
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    status:400,
+                    msg:"No se mostro el customer",
+                    cont:err
+                });
+            }
+            console.log(req.customer);
+            return res.status(200).json({
+                ok: true,
+                status:200,
+                msg:"Se mostro el customer correctamente por country",
+                count: Customers.length,
+                Customers
             });
         });
 });
@@ -128,4 +177,36 @@ app.delete('/eliminar/:id', (req, res) => {
     });
 });
 
+//eliminar por nombre completo
+app.delete('/eliminarXnombre/:firstName/:lastName', (req, res) => {
+    let firstName = req.params.firstName;
+    let lastName = req.params.lastName;
+   
+
+    Customer.findOneAndUpdate({ firstName, lastName}, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, resp) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                status:400,
+                msg:"No se elimino el customer",
+                cont:err
+            });
+        }
+
+        if(!resp) {
+            return res.status(404).json({
+                ok: false,
+                status:404,
+                msg:"No se encontró el usuario.",
+                resp
+            });
+        }
+        return res.status(200).json({
+            ok: true,
+            status:200,
+            msg:"Se elimino correctamente customers por nombre",
+            resp
+        });
+    });
+});
 module.exports = app;

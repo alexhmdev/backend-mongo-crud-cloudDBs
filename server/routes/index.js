@@ -1,5 +1,6 @@
 /* jshint esversion: 8 */
 //agrupa todos los archivos-rutas
+/* jshint esversion: 8 */
 const express = require('express');
 const app = express();
 
