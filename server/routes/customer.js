@@ -14,12 +14,12 @@ app.post('/registrar', (req, res) => {
         city: body.city,
         country: body.country,
         district: body.district,
-        firstName: body.firstName.toLowerCase(),// toLowerCase() se usa para convertir todo en minusculas :)
-        lastName: body.lastName.toLowerCase()
+        firstName: body.firstName,// toLowerCase() se usa para convertir todo en minusculas :) :(
+        lastName: body.lastName
 
     });
 
-    customer.save((err, usrDB) => {
+    customer.save((err, Customers) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -31,7 +31,7 @@ app.post('/registrar', (req, res) => {
             ok: true,
             status:200,
             msg:"Se registro la customer correctamente",
-            usrDB
+            Customers
         });
     });
 });
@@ -77,7 +77,7 @@ app.get('/obtener/:id', (req, res) => {
             console.log(req.customer);
             return res.status(200).json({
                 ok: true,
-                status:400,
+                status:200,
                 msg:"Se mostro la customer correctamente por id",
                 count: Customers.length,
                 Customers
@@ -137,7 +137,7 @@ app.get('/obtenerXpais/:pais', (req, res) => {
 app.put('/actualizar/:id', (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['address','city','country','district','firstName','lastName']); 
-    Customer.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
+    Customer.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, Customers) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -150,7 +150,7 @@ app.put('/actualizar/:id', (req, res) => {
             ok: true,
             status:200,
             msg:"Se actualizo correctamente el customer",
-            cont:usrDB
+            Customers
         });
 
     });
