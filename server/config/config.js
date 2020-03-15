@@ -12,6 +12,7 @@ if (process.env.NODE_ENV === 'dev') {
 } else {
    
   //  urlDB = 'mongodb+srv://clases:M0ngusRul3s20@cluster0-wkwwm.mongodb.net/sample_airbnb'
+    urlDB = 'mongodb+srv://user:nC5MXl6V4mLxklhf@cluster0-fh2p2.mongodb.net/sample_airbnb';
 
 }
 
