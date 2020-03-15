@@ -1,3 +1,4 @@
+/* jshint esversion: 8 */
 const mongoose = require('mongoose');
 const uniquevalidator = require('mongoose-unique-validator');
 
@@ -5,7 +6,7 @@ const uniquevalidator = require('mongoose-unique-validator');
 let Schema = mongoose.Schema;
 
 
-let huoseSchema = new Schema({
+let customerSchema = new Schema({
     _id:{
         type:Number,
      
@@ -14,32 +15,35 @@ let huoseSchema = new Schema({
         type: String
 
     },
-    type: {
+    city: {
+        type: String
+    },
+    country: {
         type: String
 
     },
-    price: {
-        type: Number
-    },
-    rating: {
-        type: Number
-
-    },
-    review: {
-        type: String
-
-    },
-    info: {
-        type: String
-
-    }
-
    
-});
+    district: {
+        type: String
+
+    },
+    firstName: {
+        type: String
+
+    },
+    lastName: {
+        type: String
+    },
+    status:{
+        type: Boolean,
+        default: true
+    }
+},{collection:'Customers'});
 //el esquema utilize el plugin
-huoseSchema.plugin(uniquevalidator, {
+customerSchema.plugin(uniquevalidator, {
     message: '{PATH} Debe que ser único'
 });
+({collection:"Customers"});
 
 //crea una coleccion
-module.exports = mongoose.model('House', huoseSchema);
+module.exports = mongoose.model('House', customerSchema);
