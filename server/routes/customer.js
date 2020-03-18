@@ -49,7 +49,6 @@ app.get('/obtener', (req, res) => {
                     cont:err
                 });
             }
-            console.log(req.customer);
             return res.status(200).json({
 
                 ok: true,
@@ -74,7 +73,6 @@ app.get('/obtener/:id', (req, res) => {
                     cont:err
                 });
             }
-            console.log(req.customer);
             return res.status(200).json({
                 ok: true,
                 status:200,
@@ -88,7 +86,7 @@ app.get('/obtener/:id', (req, res) => {
 //get por nombre
 app.get('/obtenerXnombre/:nombre', (req, res) => {
     let nombre = req.params.nombre;
-    Customer.find({ estado: true, firstName: nombre }) 
+    Customer.find({ estado: true, $or:[{firstName: nombre },{lastName: nombre}]}) 
         .exec((err, Customers) => { //ejecuta la funcion
             if (err) {
                 return res.status(400).json({
@@ -98,7 +96,6 @@ app.get('/obtenerXnombre/:nombre', (req, res) => {
                     cont:err
                 });
             }
-            console.log(req.customer);
             return res.status(200).json({
                 ok: true,
                 status:200,
@@ -122,7 +119,6 @@ app.get('/obtenerXpais/:pais', (req, res) => {
                     cont:err
                 });
             }
-            console.log(req.customer);
             return res.status(200).json({
                 ok: true,
                 status:200,
