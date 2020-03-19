@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+
 //habilita CORS
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -38,3 +39,4 @@ mongoose.connect(process.env.URLDB, {
     });
 //puerto que escucha 
 app.listen(process.env.PORT);
+

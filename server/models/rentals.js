@@ -8,7 +8,7 @@ let Schema = mongoose.Schema;
 
 let rentalSchema = new Schema({
     idCustomer: {
-        type: String,
+        type: Number,
         ref: 'Customers',
         required: [true, 'Ingresar codigo del customer']
     },

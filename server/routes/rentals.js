@@ -40,8 +40,8 @@ app.post('/registrar', (req, res) => {
     });
 });
 
-app.get('/obtenerRentadas', (req, res) => {
-    ListingAndReview.find({ rentada: true })
+app.get('/obtener', (req, res) => {
+    ListingAndReview.find({ rentada: true }).populate('idCustomer').populate('idListingAndReview')
         .exec((err, rentadas) => {
             if (err) {
                 return res.status(400).json({
