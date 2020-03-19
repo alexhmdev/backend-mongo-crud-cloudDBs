@@ -40,6 +40,27 @@ app.post('/registrar', (req, res) => {
     });
 });
 
+app.delete('/desrentar/:idCasa/:idRental', (req, res) => {
+  let idCasa = req.params.idCasa;
+  let idRental = req.params.idRental;
+    ListingAndReview.findByIdAndUpdate(idCasa, { rentada: false }, { new: true, runValidators: true, context: 'query' }, (err, resp) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            Rental.findByIdAndUpdate(idRental, { rented: false }, { new: true, runValidators: true, context: 'query' }).then((resp)=>{
+                return res.status(200).json({
+                    ok: true,
+                    resp
+                });
+            })
+          
+        });
+       
+    });
+
 
 app.get('/obtener/rentadas', (req, res) => {
     ListingAndReview.find({ rentada: true })
