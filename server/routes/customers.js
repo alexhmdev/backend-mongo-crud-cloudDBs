@@ -1,7 +1,7 @@
 /* jshint esversion: 8 */
 const express = require('express');
 const _ = require('underscore');
-const Customer = require('../models/customer'); //subir nivel
+const Customer = require('../models/customers'); //subir nivel
 const app = express();
 
 app.post('/registrar', (req, res) => {
