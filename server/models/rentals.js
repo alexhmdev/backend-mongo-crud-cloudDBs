@@ -1,6 +1,5 @@
 /* jshint esversion: 8 */
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
 const Customers = require('./customers');
 const ListingAndReview = require('./listingAndReviews');
 
@@ -29,10 +28,6 @@ let rentalSchema = new Schema({
         type: Boolean,
         default: true
     }
-});
-
-rentalSchema.plugin(uniqueValidator, {
-    message: '{PATH} debe ser único y diferente'
 });
 
 module.exports = mongoose.model('Rental', rentalSchema);

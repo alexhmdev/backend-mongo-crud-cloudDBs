@@ -40,20 +40,39 @@ app.post('/registrar', (req, res) => {
     });
 });
 
-app.get('/obtener', (req, res) => {
+app.get('/obtener/rentadas', (req, res) => {
     ListingAndReview.find({ rentada: true }).populate('idCustomer').populate('idListingAndReview')
-        .exec((err, rentadas) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-            return res.status(200).json({
-                ok: true,
-                rentadas
-            });
+    .then((resp)=>{
+        return res.status(200).json({
+            ok: true,
+            msg: 'Obtenidas propiedades rentadas con exito',
+            resp
         });
+    }).catch((err)=>{
+        return res.status(400).json({
+            ok: false,
+            msg: 'ocurrio un error intenta de nuevo'
+        });
+    });
+});
+
+app.get('/obtener/:desde', (req, res) => {
+    let desde = req.params.desde || 0;
+    desde = Number(desde);
+
+    ListingAndReview.find({}).skip(desde).limit(10)
+    .then((resp)=>{
+        return res.status(200).json({
+            ok: true,
+            msg: 'Obtenidas propiedades rentadas con exito',
+            resp
+        });
+    }).catch((err)=>{
+        return res.status(400).json({
+            ok: false,
+            msg: 'ocurrio un error intenta de nuevo'
+        });
+    });
 });
 
 app.get('/obtenerTipoPropiedad', (req, res) => {
@@ -73,7 +92,7 @@ app.get('/obtenerTipoPropiedad', (req, res) => {
 });
 
 app.get('/obtenerPrecio', (req, res) => {
-    ListingAndReview.find({}).sort([['price', 1]]).limit(30)
+    ListingAndReview.find({},).sort([['price', 1]]).limit(30)
         .exec((err, casas) => {
             if (err) {
                 return res.status(400).json({
@@ -88,6 +107,35 @@ app.get('/obtenerPrecio', (req, res) => {
             });
 
         });
+
+});
+
+app.get('/obtenerPrecio/:minimo/:maximo/:desde', (req, res) => {
+    let minimo = req.params.minimo || 0;
+    minimo = Number(minimo); //forzar que el dato siempre sea numerico
+    let maximo = req.params.maximo || 0;
+    maximo = Number(maximo);
+    let desde = req.params.desde || 0;
+    desde = Number(desde);
+
+    ListingAndReview.find({$and:[{price:{$gt:minimo--}},{price:{$lt:maximo++}}]},{price:1})
+    .sort({price:1})
+    .skip(desde)
+    .limit(10)
+    .then((resp)=>{
+        return res.status(200).json({
+            ok: true,
+            msg: `Obteniendo resultados de precio minimo: ${minimo} maximo: ${maximo}`,
+            count: resp.length,
+            resp
+        });
+    }).catch((err)=>{
+        return res.status(400).json({
+            ok: false,
+            msg: 'Ocurrio un error intenta de nuevo',
+            err
+        });
+    });
 
 });
 
