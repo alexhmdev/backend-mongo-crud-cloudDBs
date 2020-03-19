@@ -16,15 +16,15 @@ let rentalSchema = new Schema({
         ref: 'ListingAndReview',
         required: [true, 'Favor de ingresar el id de la casa']
     },
-    fechaDeRenta: {
+    rentalDate: {
         type: Date,
         default: Date()
     },
-    fechaDevolucion: {
+    returnDate: {
         type: Date,
         required: [true, 'Favor de ingresar la fecha de devolucion']
     },
-    rentada: {
+    rented: {
         type: Boolean,
         default: true
     }
