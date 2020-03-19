@@ -7,24 +7,24 @@ let Schema = mongoose.Schema;
 
 let rentalSchema = new Schema({
     idCustomer: {
-        type: Schema.Types.Number,
+        type: Number,
         ref: 'Customers',
         required: [true, 'Ingresar codigo del customer']
     },
     idListingAndReview: {
-        type: Schema.Types.String,
+        type: String,
         ref: 'ListingAndReview',
         required: [true, 'Favor de ingresar el id de la casa']
     },
-    fechaDeRenta: {
+    rentalDate: {
         type: Date,
         default: Date()
     },
-    fechaDevolucion: {
+    returnDate: {
         type: Date,
         required: [true, 'Favor de ingresar la fecha de devolucion']
     },
-    rentada: {
+    rented: {
         type: Boolean,
         default: true
     }

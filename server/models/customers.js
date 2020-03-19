@@ -51,4 +51,4 @@ customerSchema.plugin(AutoIncrement,{_id:'_id'},{
 });
 
 //crea una coleccion
-module.exports = mongoose.model('Customer', customerSchema);
+module.exports = mongoose.model('Customers', customerSchema);

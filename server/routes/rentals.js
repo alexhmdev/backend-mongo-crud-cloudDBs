@@ -11,7 +11,7 @@ app.post('/registrar', (req, res) => {
     let renta = new Rental({
         idCustomer: body.idCustomer,
         idListingAndReview: body.idListingAndReview,
-        fechaDevolucion: body.fechaDevolucion
+        returnDate: body.returnDate
     });
 
     renta.save((err, renDB) => {
@@ -40,8 +40,9 @@ app.post('/registrar', (req, res) => {
     });
 });
 
+
 app.get('/obtener/rentadas', (req, res) => {
-    ListingAndReview.find({ rentada: true }).populate('customers').populate('listingAndReviews')
+    ListingAndReview.find({ rentada: true })
     .then((resp)=>{
         return res.status(200).json({
             ok: true,
@@ -60,11 +61,12 @@ app.get('/obtener/:desde', (req, res) => {
     let desde = req.params.desde || 0;
     desde = Number(desde);
 
-    ListingAndReview.find({}).skip(desde).limit(10)
+    ListingAndReview.find({ rentada: false}).skip(desde).limit(10)
     .then((resp)=>{
         return res.status(200).json({
             ok: true,
             msg: 'Obtenidas propiedades rentadas con exito',
+            count: resp.length,
             resp
         });
     }).catch((err)=>{
@@ -75,8 +77,8 @@ app.get('/obtener/:desde', (req, res) => {
     });
 });
 
-app.get('/obtenerTipoPropiedad', (req, res) => {
-    ListingAndReview.find({}, 'name property_type')
+app.get('/obtener/propiedad', (req, res) => {
+    ListingAndReview.find({"property_type": req.params.property_type})
         .exec((err, casas) => {
             if (err) {
                 return res.status(400).json({
@@ -91,34 +93,66 @@ app.get('/obtenerTipoPropiedad', (req, res) => {
         });
 });
 
-app.get('/obtenerPrecio', (req, res) => {
-    ListingAndReview.find({},).sort([['price', 1]]).limit(30)
-        .exec((err, casas) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            return res.status(200).json({
-                ok: true,
-                casas
-            });
-
+app.get('/propiedades',(req,res) => {
+    ListingAndReview.distinct("property_type").then((resp)=>{
+        return res.status(200).json({
+            ok: true,
+            msg: 'Obtenidas propiedades con exito',
+            resp
         });
+    }).catch((err)=>{
+        return res.status(400).json({
+            ok: false,
+            msg: 'Algo salio mal',
+            err
+        });
+    });
+});
+
+app.get('/obtenerXpropiedad/:propiedad',(req,res) => {
+    ListingAndReview.find({"property_type":req.params.propiedad}).then((resp)=>{
+        return res.status(200).json({
+            ok: true,
+            msg: 'Obtenidas propiedades con exito',
+            resp
+        });
+    }).catch((err)=>{
+        return res.status(400).json({
+            ok: false,
+            msg: 'Algo salio mal',
+            err
+        });
+    });
+});
+
+app.get('/mostrar', (req, res) => {
+   Rental.find({ rented: true}).populate('idCustomer').populate('idListingAndReview').then((resp)=>{
+       return res.status(200).json({
+           ok: true,
+           msg: 'mostrando rentas',
+           resp
+       });
+   }).catch((err)=>{
+       return res.status(400).json({
+           ok: false,
+           msg: 'Ocurrio un error',
+           err
+       });
+   });
 
 });
 
 app.get('/obtenerPrecio/:minimo/:maximo/:desde', (req, res) => {
     let minimo = req.params.minimo || 0;
-    minimo = Number(minimo); //forzar que el dato siempre sea numerico
+    minimo = Number(minimo);
+    minimo--; //forzar que el dato siempre sea numerico
     let maximo = req.params.maximo || 0;
     maximo = Number(maximo);
+    maximo++;
     let desde = req.params.desde || 0;
     desde = Number(desde);
 
-    ListingAndReview.find({$and:[{price:{$gt:minimo--}},{price:{$lt:maximo++}}]},{price:1})
+    ListingAndReview.find({$and:[{price:{$gt:minimo}},{price:{$lt:maximo}}]})
     .sort({price:1})
     .skip(desde)
     .limit(10)
