@@ -7,12 +7,12 @@ let Schema = mongoose.Schema;
 
 let rentalSchema = new Schema({
     idCustomer: {
-        type: Number,
+        type: Schema.Types.Number,
         ref: 'Customers',
         required: [true, 'Ingresar codigo del customer']
     },
     idListingAndReview: {
-        type: String,
+        type: Schema.Types.String,
         ref: 'ListingAndReview',
         required: [true, 'Favor de ingresar el id de la casa']
     },

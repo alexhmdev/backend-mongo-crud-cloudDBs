@@ -41,7 +41,7 @@ app.post('/registrar', (req, res) => {
 });
 
 app.get('/obtener/rentadas', (req, res) => {
-    ListingAndReview.find({ rentada: true }).populate('idCustomer').populate('idListingAndReview')
+    ListingAndReview.find({ rentada: true }).populate('customers').populate('listingAndReviews')
     .then((resp)=>{
         return res.status(200).json({
             ok: true,
