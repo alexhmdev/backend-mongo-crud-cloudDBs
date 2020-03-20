@@ -98,20 +98,25 @@ app.get('/obtener/:desde', (req, res) => {
     });
 });
 
-app.get('/obtener/propiedad', (req, res) => {
+app.get('/obtenerXpropiedad/:property_type/:desde', (req, res) => {
+    let desde = req.params.desde;
+    desde = Number(desde);
     ListingAndReview.find({"property_type": req.params.property_type})
-        .exec((err, casas) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-            return res.status(200).json({
-                ok: true,
-                casas
-            });
+    .skip(desde)
+    .limit(10)
+    .then((resp)=>{
+        return res.status(200).json({
+            ok: true,
+            msg: 'Funciona correctamente',
+            resp
         });
+    }).catch((err)=>{
+        return res.status(400).json({
+            ok: false,
+            msg: 'ocurrio un error',
+            err
+        });
+    });
 });
 
 app.get('/propiedades',(req,res) => {
@@ -151,6 +156,7 @@ app.get('/mostrar', (req, res) => {
        return res.status(200).json({
            ok: true,
            msg: 'mostrando rentas',
+           count: resp.length,
            resp
        });
    }).catch((err)=>{
